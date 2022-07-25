@@ -1,0 +1,326 @@
+<div class="container">
+  <div class="row text-center">
+    <div>
+      <hr />
+      <h1 class="text-muted">Project</h1>
+    </div>
+    <div *ngIf="isloged()" class="text-center">
+      <button
+        type="button"
+        class="btn btn-success"
+        (click)="onOpenModal('add')"
+      >
+        <a class="nav-link" style="color: #fff"
+          >Add Project<span class="sr-only">(current)</span></a
+        >
+      </button>
+    </div>
+
+    <div
+      id="even"
+      cdkDropList
+      [cdkDropListData]="projects"
+      cdkDropListConnectedTo="even"
+      (cdkDropListDropped)="onDrop($event)"
+      #educationList="cdkDropList"
+      class="row mt-2"
+    >
+      <div class="card skill shadow col-12" *ngFor="let project of projects">
+        <div>
+          <div class="col text-center">
+            <a
+              *ngIf="isloged()"
+              (click)="onOpenModal('edit', project)"
+              class="btn btn-primary tooltips"
+              data-placement="top"
+              data-toggle="tooltip"
+              data-original-title="Edit"
+              ><i class="fa fa-pencil"></i>
+            </a>
+            <a
+              *ngIf="isloged()"
+              (click)="onOpenModal('delete', project)"
+              class="btn btn-secondary tooltips"
+              data-placement="top"
+              data-toggle="tooltip"
+              data-original-title="Delete"
+              ><i class="fa fa-times"></i
+            ></a>
+          </div>
+          <div class="row g-0 titles">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div class="card-body text-center">
+                <h2>{{ project.titlePro }}</h2>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                  <img
+                    src="{{ project.picPro }}"
+                    class="img-fluid img"
+                    alt="..."
+                  />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                  <p class="titles">{{ project.descPro }}</p>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 titles">
+                  <button type="button" class="btn btn-light">
+                    <a href="{{ project.linkPro }}" target="_blank"
+                      >Source code</a
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Project Modal -->
+  <div
+    class="modal fade"
+    id="addProjectModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="addProjectModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addProjectModalLabel">Add project</h5>
+        </div>
+        <div class="modal-body">
+          <form #addForm="ngForm" (ngSubmit)="onAddProject(addForm)">
+            <div class="form-group">
+              <label for="titlePro">Title</label>
+              <input
+                type="text"
+                ngModel
+                name="titlePro"
+                class="form-control"
+                id="titlePro"
+                placeholder="Title"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="linkPro">Source code</label>
+              <input
+                type="text"
+                ngModel
+                name="linkPro"
+                class="form-control"
+                id="linkPro"
+                placeholder="link"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="descPro">Project Description</label>
+              <input
+                type="text"
+                ngModel
+                name="descPro"
+                class="form-control"
+                id="descPro"
+                placeholder="Description"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="picPro">Image URL</label>
+              <input
+                type="text"
+                ngModel
+                name="picPro"
+                class="form-control"
+                id=" picPro"
+                placeholder="Image URL"
+                required
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                id="add-project-form"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                [disabled]="addForm.invalid"
+                type="submit"
+                class="btn btn-primary"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit project modal -->
+  <div
+    class="modal fade"
+    id="editProjectModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="editProjectModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateProjectModalLabel">
+            Editar Proyecto {{ editProject?.titlePro }}
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form #editForm="ngForm">
+            <div class="form-group">
+              <label for="name">Project title</label>
+              <input
+                type="text"
+                ngModel="{{ editProject?.titlePro }}"
+                name="titlePro"
+                class="form-control"
+                id="titlePro1"
+                aria-describedby="emailHelp"
+                placeholder="Title"
+              />
+            </div>
+            <input
+              type="hidden"
+              ngModel="{{ editProject?.idPro }}"
+              name="idPro"
+              class="form-control"
+              id="idPro1"
+              placeholder=""
+            />
+            <div class="form-group">
+              <label for="descExp">Project description</label>
+              <input
+                type="text"
+                ngModel="{{ editProject?.descPro }}"
+                name="descPro"
+                class="form-control"
+                id="descPro1"
+                placeholder="Description"
+              />
+            </div>
+            <div class="form-group">
+              <label for="linkPro">Project source</label>
+              <input
+                type="text"
+                ngModel="{{ editProject?.linkPro }}"
+                name="linkPro"
+                class="form-control"
+                id="linkPro1"
+                placeholder="Since"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="picExp">Image URL</label>
+              <input
+                type="text"
+                ngModel="{{ editProject?.picPro }}"
+                name="picPro"
+                class="form-control"
+                id="picPro1"
+                placeholder="Image URL"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                id=""
+                data-dismiss="modal"
+                class="btn btn-secondary"
+              >
+                Close
+              </button>
+              <button
+                (click)="onUpdateProject(editForm.value)"
+                data-dismiss="modal"
+                class="btn btn-primary"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete project modal -->
+  <div
+    class="modal fade"
+    id="deleteProjectModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="deleteModelLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModelLabel">Delete Project</h5>
+        </div>
+        <div class="modal-body">
+          <p style="color: rgb(255, 255, 255)">
+            Are you sure you want to delete
+            {{ deleteProject?.titlePro }}?
+          </p>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              No
+            </button>
+            <button
+              (click)="onDeleteProject(deleteProject!.idPro)"
+              class="btn btn-danger"
+              data-dismiss="modal"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification for no projects -->
+  <div
+    *ngIf="projects?.length == 0 && isloged()"
+    class="col-lg-12 col-md-12 col-xl-12"
+  >
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">Empty project</h4>
+      <p>Empty project</p>
+    </div>
+  </div>
+
+  <!-- Notification for no data -->
+  <div
+    *ngIf="projects?.length == 0 && !isloged()"
+    class="col-lg-12 col-md-12 col-xl-12 spinner"
+  >
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

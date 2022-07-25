@@ -1,0 +1,170 @@
+<div class="container">
+  <div class="row" id="main-container">
+    <hr />
+    <div *ngIf="info" class="card skill shadow col-12">
+      <div class="row">
+        <div
+          *ngIf="info?.nameInfo == null"
+          class="col-lg-12 col-md-12 col-xl-12"
+        >
+          <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Loading!</h4>
+            <p>Please wait!.</p>
+          </div>
+        </div>
+        <div class="text-center">
+          <a
+            *ngIf="isloged()"
+            (click)="onOpenModal('edit', info)"
+            class="btn btn-primary tooltips"
+            data-placement="top"
+            data-toggle="tooltip"
+            data-original-title="Edit"
+            ><i class="fa fa-pencil"></i>
+          </a>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-5">
+          <div class="p-profile text-center">
+            <img src="{{ info?.profilePic }}" class="img-fluid" />
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-7 desc-gral">
+          <div class="loader">
+            <div class="name">
+              <h1 class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+                {{ info?.nameInfo }} {{ info?.surnameInfo }}
+              </h1>
+              <p>{{ info.titleInfo }}</p>
+            </div>
+          </div>
+
+          <div class="row about">
+            <div class="col-xs-12 col-sm-10 col-md-12 col-lg-12">
+              <span>
+                <h1>About me</h1>
+              </span>
+
+              <p>
+                {{ info?.descriptionInfo }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  Edit info modal  -->
+  <div
+    class="modal fade modales"
+    id="editInfoModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="editInfoModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="editInfoModalLabel">
+            Edit Info {{ info?.nameInfo }}
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form #editForm="ngForm">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input
+                type="text"
+                ngModel="{{ info?.nameInfo }}"
+                name="nameInfo"
+                class="form-control"
+                id="nameInfo"
+                aria-describedby="nameInfo"
+                placeholder="Name"
+              />
+            </div>
+            <input
+              type="hidden"
+              ngModel="{{ info?.idInfo }}"
+              name="idInfo"
+              class="form-control"
+              id="idInfo"
+              placeholder=""
+            />
+
+            <div class="form-group">
+              <label for="surname">Surname</label>
+              <input
+                type="text"
+                ngModel="{{ info?.surnameInfo }}"
+                name="surnameInfo"
+                class="form-control"
+                id="surnameInfo"
+                placeholder="Surname"
+              />
+            </div>
+            <div class="form-group">
+              <label for="titleInfo">Title</label>
+              <input
+                type="text"
+                ngModel="{{ info?.titleInfo }}"
+                name="titleInfo"
+                class="form-control"
+                id="titleInfo"
+                placeholder="Title"
+              />
+            </div>
+            <div class="form-group">
+              <label for="descriptionInfo">Description</label>
+              <input
+                type="text"
+                ngModel="{{ info?.descriptionInfo }}"
+                name="descriptionInfo"
+                class="form-control"
+                id="descriptionInfo"
+                placeholder="Description"
+              />
+            </div>
+            <div class="form-group">
+              <label for="profilePic">Image URL</label>
+              <input
+                type="text"
+                ngModel="{{ info?.profilePic }}"
+                name="profilePic"
+                class="form-control"
+                id="profilePic"
+                placeholder="Image URL"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                data-dismiss="modal"
+                class="btn btn-secondary"
+              >
+                Close
+              </button>
+              <button
+                (click)="onUpdateInfo(editForm.value)"
+                data-dismiss="modal"
+                class="btn btn-primary"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Notification for no data -->
+  <div
+    *ngIf="info == null && !isloged()"
+    class="col-lg-12 col-md-12 col-xl-12 spinner"
+  >
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>
